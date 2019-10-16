@@ -62,22 +62,35 @@ export class CommandExecutorService {
   /**
  * inserts image in the editor
  *
- * @param videParams url of the image to be inserted
+ * @param videoParams url of the image to be inserted
  */
-  insertVideo(videParams: any): void {
+  insertVideo(videoParams: any): void {
     if (this.savedSelection) {
-      if (videParams) {
+      if (videoParams) {
         const restored = Utils.restoreSelection(this.savedSelection);
         if (restored) {
-          if (this.isYoutubeLink(videParams.videoUrl)) {
-            const youtubeURL = '<iframe width="' + videParams.width + '" height="' + videParams.height + '"'
-              + 'src="' + videParams.videoUrl + '"></iframe>';
-            this.insertHtml(youtubeURL);
+          if (this.isYoutubeLink(videoParams.videoUrl)) {
+            let youtubeUrl: string = videoParams.videoUrl;
+            if (youtubeUrl.includes('?v=')) {
+              const urlParams = youtubeUrl.split('?v=');
+              youtubeUrl = urlParams[urlParams.length - 1];
+            } else {
+              const urlParams = youtubeUrl.split('/');
+              youtubeUrl = urlParams[urlParams.length - 1];
+            }
+            if (videoParams.width === '' || videoParams.height === '""') {
+                videoParams.width = '560';
+                videoParams.height = '315';
+            }
+            console.log(videoParams);
+            const youtubeHTML = '<iframe width="' + videoParams.width + '" height="' + videoParams.height + '"'
+              + 'src="https://www.youtube.com/embed/' + youtubeUrl + '"></iframe>';
+            this.insertHtml(youtubeHTML);
           } else if (this.checkTagSupportInBrowser('video')) {
 
-            if (this.isValidURL(videParams.videoUrl)) {
-              const videoSrc = '<video width="' + videParams.width + '" height="' + videParams.height + '"'
-                + ' controls="true"><source src="' + videParams.videoUrl + '"></video>';
+            if (this.isValidURL(videoParams.videoUrl)) {
+              const videoSrc = '<video width="' + videoParams.width + '" height="' + videoParams.height + '"'
+                + ' controls="true"><source src="' + videoParams.videoUrl + '"></video>';
               this.insertHtml(videoSrc);
             } else {
               throw new Error('Invalid video URL');
