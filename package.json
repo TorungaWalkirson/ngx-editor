@@ -1,5 +1,5 @@
 {
-  "name": "ngx-editor",
+  "name": "@torunga/ngx-editor",
   "version": "4.1.1",
   "description": "WYSIWYG Editor for Angular Applications",
   "license": "MIT",
@@ -90,5 +90,8 @@
     "tslint": "~5.11.0",
     "typescript": "~2.9.2",
     "zone.js": "~0.8.26"
-  }
+  },
+  "main": ".eslintrc.js",
+  "dependencies": {},
+  "author": ""
 }
